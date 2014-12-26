@@ -1,0 +1,3 @@
+#README
+
+Custom child theme.
