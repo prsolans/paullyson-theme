@@ -19,15 +19,20 @@ $format = get_post_format();
 
                     <div class="post-header">
 
-                        <h2 class="post-title"><a href="<?php the_permalink(); ?>" rel="bookmark"
+                        <div itemscope itemtype="http://schema.org/Restaurant">
+
+                            <h2 class="post-title" itemprop="name"><a href="<?php the_permalink(); ?>" rel="bookmark"
                                                   title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 
                         <h3>
 
-                            <br/><?php $scores = get_all_ratings_for_a_restaurant(get_the_ID());
+                            <br/>
 
-                            echo "Overall Score: " . $scores['overallScore'];
-                            ?>
+                            <span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+                            <?php $scores = get_all_ratings_for_a_restaurant(get_the_ID());
+
+                            echo "Overall Score: <span itemprop='ratingValue'>" . $scores['overallScore'] . "</span>";
+                            ?></span>
                             <hr/>
 
 
@@ -60,7 +65,6 @@ $format = get_post_format();
                         <?php endif; ?>
 
                         <?php
-                        if ($scores['incomplete'] == false) {
                             echo '<div class="rating-block"><h3>PRS says</h3>';
                             echo '<label>Service:</label> ' . get_field('prs_restaurant_service');
                             echo '<br/><label>Food:</label> ' . get_field('prs_restaurant_food');
@@ -71,7 +75,6 @@ $format = get_post_format();
                             echo '<br/><label>Food:</label> ' . get_field('allykc_restaurant_food');
                             echo '<br/><label>Ambiance:</label> ' . get_field('allykc_restaurant_ambiance');
                             echo '</div>';
-                        }
                         ?>
                         <div class="post-content">
 

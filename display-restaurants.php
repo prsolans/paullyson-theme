@@ -20,7 +20,7 @@ Template Name: Restaurants (All)
             <?php
             display_page_title();
             display_page_block_copy();
-            display_ratings_listings('restaurant');
+            display_ratings_table('restaurant');
             display_rating_sidebar('restaurant');
             ?>
 

@@ -22,7 +22,7 @@ Template Name: Experiences (All)
             display_page_title();
             display_page_block_copy();
 
-            display_ratings_listings('experience');
+            display_ratings_table('experience');
             display_rating_sidebar('experience');
             ?>
 

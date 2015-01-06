@@ -20,7 +20,7 @@ Template Name: Services (All)
             <?php
             display_page_title();
             display_page_block_copy();
-            display_ratings_listings('service');
+            display_ratings_table('service');
             display_rating_sidebar('service');
 
             ?>
