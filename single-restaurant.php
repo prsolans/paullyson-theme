@@ -22,69 +22,67 @@ $format = get_post_format();
                         <div itemscope itemtype="http://schema.org/Restaurant">
 
                             <h2 class="post-title" itemprop="name"><a href="<?php the_permalink(); ?>" rel="bookmark"
-                                                  title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+                                                                      title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a>
+                            </h2>
 
-                        <h3>
+                            <h3>
 
-                            <br/>
+                                <br/>
 
                             <span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-                            <?php $scores = get_all_ratings_for_a_restaurant(get_the_ID());
+                            <?php
 
-                            echo "Overall Score: <span itemprop='ratingValue'>" . $scores['overallScore'] . "</span>";
+                            echo "Overall Score: <span itemprop='ratingValue'>" . get_overall_restaurant_ratings(). "</span>";
+
                             ?></span>
-                            <hr/>
+                                <hr/>
 
 
-                        </h3>
+                            </h3>
 
 
-                        <!-- /post-header -->
+                            <!-- /post-header -->
 
 
 
-                        <?php
-                        if (has_post_thumbnail()) : ?>
+                            <?php
+                            if (has_post_thumbnail()) : ?>
 
-                            <div class="featured-media">
+                                <div class="featured-media">
 
-                                <?php the_post_thumbnail('post-image'); ?>
+                                    <?php the_post_thumbnail('post-image'); ?>
 
-                                <?php if (!empty(get_post(get_post_thumbnail_id())->post_excerpt)) : ?>
+                                    <?php if (!empty(get_post(get_post_thumbnail_id())->post_excerpt)) : ?>
 
-                                    <div class="media-caption-container">
+                                        <div class="media-caption-container">
 
-                                        <p class="media-caption"><?php echo get_post(get_post_thumbnail_id())->post_excerpt; ?></p>
+                                            <p class="media-caption"><?php echo get_post(get_post_thumbnail_id())->post_excerpt; ?></p>
 
-                                    </div>
+                                        </div>
 
-                                <?php endif; ?>
+                                    <?php endif; ?>
 
-                            </div> <!-- /featured-media -->
+                                </div> <!-- /featured-media -->
 
-                        <?php endif; ?>
+                            <?php endif; ?>
 
-                        <?php
-                            echo '<div class="rating-block"><h3>PRS says</h3>';
-                            echo '<label>Service:</label> ' . get_field('prs_restaurant_service');
-                            echo '<br/><label>Food:</label> ' . get_field('prs_restaurant_food');
-                            echo '<br/><label>Ambiance:</label> ' . get_field('prs_restaurant_ambiance');
-                            echo '</div>';
-                            echo '<div class="rating-block"><h3>Allykc says</h3>';
-                            echo '<label>Service:</label> ' . get_field('allykc_restaurant_service');
-                            echo '<br/><label>Food:</label> ' . get_field('allykc_restaurant_food');
-                            echo '<br/><label>Ambiance:</label> ' . get_field('allykc_restaurant_ambiance');
-                            echo '</div>';
-                        ?>
-                        <div class="post-content">
+                            <?php
+
+                            display_restaurant_ratings_by_author('prs');
+                            display_restaurant_ratings_by_author('allykc');
+
+                            ?>
 
 
+                            <div class="post-content">
+
+
+                            </div>
+
+                            <div class="clear"></div>
+
+                            <?php the_content(); ?>
                         </div>
-
-                        <div class="clear"></div>
-
-                        <?php the_content(); ?>
-</div>
 
                         <div class="location-info-block">
 
@@ -96,7 +94,7 @@ $format = get_post_format();
                                 <h4><?php echo get_location_address($location); ?></h4>
                                 <div class="acf-map">
                                     <div class="marker" data-lat="<?php echo $location['lat']; ?>"
-                                         data-lng="<?php echo $location['lng']; ?>">Hello everybody
+                                         data-lng="<?php echo $location['lng']; ?>"><?php the_title(); ?>
                                     </div>
                                 </div>
                             <?php endif; ?>
