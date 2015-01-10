@@ -32,7 +32,7 @@ $format = get_post_format();
                             <span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
                             <?php
 
-                            echo "Overall Score: <span itemprop='ratingValue'>" . get_overall_restaurant_ratings(). "</span>";
+                            echo "Overall Score: <span itemprop='ratingValue'>" . get_overall_restaurant_ratings(get_the_ID()). "</span>";
 
                             ?></span>
                                 <hr/>
