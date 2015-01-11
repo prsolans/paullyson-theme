@@ -28,6 +28,7 @@ $format = get_post_format();
                             <h3>
 
                             <span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+                                <span style="display: none;" itemprop="reviewCount">2</span>
                             <?php
 
                             echo "Overall Score: <span itemprop='ratingValue'>" . get_overall_restaurant_ratings(get_the_ID()) . "</span>";
@@ -85,16 +86,19 @@ $format = get_post_format();
                             echo '<div class="clear"></div><div>';
 
                             if (isset($venueInfo['streetAddress0'])) {
+                                echo "<span itemprop='address' itemscope itemtype='http://schema.org/PostalAddress'>";
+                                echo "<span itemprop='streetAddress'>";
                                 echo $venueInfo['streetAddress0'];
+                                echo "</span></span>";
                             }
                             if (isset($venueInfo['streetAddress1'])) {
                                 echo "<br/>" . $venueInfo['streetAddress1'];
                             }
                             if (isset($venueInfo['url'])) {
-                                echo "<br/><a href='" . $venueInfo['url'] . "' target='_blank'>Website</a>";
+                                echo "<br/><a href='" . $venueInfo['url'] . "' target='_blank' itemprop='url'>Website</a>";
                             }
                             if (isset($venueInfo['reservations'])) {
-                                echo "<br/><a href='" . $venueInfo['reservations'] . "' target='_blank'>Reservations</a>";
+                                echo "<br/><a href='" . $venueInfo['reservations'] . "' target='_blank' itemprop='acceptsReservations'>Reservations</a>";
                             }
 
                             echo "</div>";

@@ -1,5 +1,13 @@
 <?php
 
+remove_filter ('category_description', 'wptexturize');
+remove_filter ('list_cats', 'wptexturize');
+remove_filter ('comment_author', 'wptexturize');
+remove_filter ('comment_text', 'wptexturize');
+remove_filter ('the_title', 'wptexturize');
+remove_filter ('the_content', 'wptexturize');
+remove_filter ('the_excerpt', 'wptexturize');
+
 add_action('wp_enqueue_scripts', 'add_custom_theme_assets');
 /**
  * Add scripts and stylesheets specific to this child theme
