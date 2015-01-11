@@ -21,7 +21,7 @@ $format = get_post_format();
 
                         <div itemscope itemtype="http://schema.org/Restaurant">
 
-                            <h2 class="post-title" itemprop="name"><a href="<?php the_permalink(); ?>" rel="bookmark"
+                            <h2 class="post-title entry-title" itemprop="name"><a href="<?php the_permalink(); ?>" rel="bookmark"
                                                                       title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a>
                             </h2>
 
@@ -146,9 +146,9 @@ $format = get_post_format();
 
                         <div class="post-author">
 
-                            <div class="post-author-content">
+                            <div class="post-author-content vcard author">
 
-                                <h4><?php the_author_meta('display_name'); ?></h4>
+                                <h4 class="fn"><?php the_author_meta('display_name'); ?></h4>
 
                                 <p><?php the_author_meta('description'); ?></p>
 
@@ -209,7 +209,7 @@ $format = get_post_format();
 
                         <div class="post-meta">
 
-                            <p class="post-date"><?php the_time(get_option('date_format')); ?></p>
+                            <p class="post-date date updated"><?php the_time(get_option('date_format')); ?></p>
 
                             <?php if (function_exists('zilla_likes')) zilla_likes(); ?>
 
