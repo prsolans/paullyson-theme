@@ -1,12 +1,12 @@
 <?php
 
-remove_filter ('category_description', 'wptexturize');
-remove_filter ('list_cats', 'wptexturize');
-remove_filter ('comment_author', 'wptexturize');
-remove_filter ('comment_text', 'wptexturize');
-remove_filter ('the_title', 'wptexturize');
-remove_filter ('the_content', 'wptexturize');
-remove_filter ('the_excerpt', 'wptexturize');
+remove_filter('category_description', 'wptexturize');
+remove_filter('list_cats', 'wptexturize');
+remove_filter('comment_author', 'wptexturize');
+remove_filter('comment_text', 'wptexturize');
+remove_filter('the_title', 'wptexturize');
+remove_filter('the_content', 'wptexturize');
+remove_filter('the_excerpt', 'wptexturize');
 
 add_action('wp_enqueue_scripts', 'add_custom_theme_assets');
 /**
@@ -44,6 +44,34 @@ function add_custom_theme_assets()
     wp_enqueue_script('acf-google-maps');
     wp_enqueue_style('tablesorter', get_template_directory_uri() . '-child/styles/tablesorter/tablesorter.css');
 }
+
+function theme_name_wp_title($title, $sep)
+{
+    if (is_feed()) {
+        return $title;
+    }
+
+    $pageTitle = get_the_title();
+    $category = get_posttype_category();
+    $location = get_location();
+
+    if($category == 'Food'){
+        $category = 'Restaurant';
+    }
+
+    if(is_page()){
+        $title = $pageTitle . ' Reviews | Nashville and Beyond | ';
+    }
+    elseif(is_home()){
+        $title = 'Restaurant Reviews and More for Nashville and Beyond | ';
+    }
+    else {
+        $title = $pageTitle . ' | ' . $location . ' ' . $category . ' Reviews | ';
+    }
+    return $title;
+}
+
+add_filter('wp_title', 'theme_name_wp_title', 10, 2);
 
 /**
  *  Get title and link for a page and format/display

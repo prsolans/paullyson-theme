@@ -3,7 +3,7 @@
 <html <?php language_attributes(); ?>>
 
 	<head>
-		
+
 		<meta charset="<?php bloginfo( 'charset' ); ?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
         <link href='http://fonts.googleapis.com/css?family=Fira+Sans:300,700' rel='stylesheet' type='text/css'>
