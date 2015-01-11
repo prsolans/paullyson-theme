@@ -27,12 +27,10 @@ $format = get_post_format();
 
                             <h3>
 
-                                <br/>
-
                             <span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
                             <?php
 
-                            echo "Overall Score: <span itemprop='ratingValue'>" . get_overall_restaurant_ratings(get_the_ID()). "</span>";
+                            echo "Overall Score: <span itemprop='ratingValue'>" . get_overall_restaurant_ratings(get_the_ID()) . "</span>";
 
                             ?></span>
                                 <hr/>
@@ -71,11 +69,42 @@ $format = get_post_format();
                             display_restaurant_ratings_by_author('prs');
                             display_restaurant_ratings_by_author('allykc');
 
+                            // START Restaurant Info
+
+                            $terms = get_the_terms($post->ID, 'location');
+
+                            if (!empty($terms)) {
+                                foreach ($terms AS $term) {
+                                    $location = $term->name;
+                                }
+                            }
+
+                            $venueInfo = get_foursquare_data(get_the_title(), $location);
+
+
+                            echo '<div class="clear"></div><div>';
+
+                            if (isset($venueInfo['streetAddress0'])) {
+                                echo $venueInfo['streetAddress0'];
+                            }
+                            if (isset($venueInfo['streetAddress1'])) {
+                                echo "<br/>" . $venueInfo['streetAddress1'];
+                            }
+                            if (isset($venueInfo['url'])) {
+                                echo "<br/><a href='" . $venueInfo['url'] . "' target='_blank'>Website</a>";
+                            }
+                            if (isset($venueInfo['reservations'])) {
+                                echo "<br/><a href='" . $venueInfo['reservations'] . "' target='_blank'>Reservations</a>";
+                            }
+
+                            echo "</div>";
+
+                            // END Restaurant Info
                             ?>
 
 
-                            <div class="post-content">
 
+                            <div class="post-content">
 
                             </div>
 
