@@ -72,6 +72,23 @@ $format = get_post_format();
                             display_restaurant_ratings_by_author('prs');
                             display_restaurant_ratings_by_author('allykc');
 
+
+                            ?>
+
+
+
+                            <div class="post-content">
+
+                            </div>
+
+                            <div class="clear"></div>
+
+                            <?php the_content(); ?>
+                        </div>
+
+                        <div class="location-info-block">
+
+                            <?php
                             // START Restaurant Info
 
                             $terms = get_the_terms($post->ID, 'location');
@@ -106,30 +123,12 @@ $format = get_post_format();
                             echo "</div>";
 
                             // END Restaurant Info
-                            ?>
 
-
-
-                            <div class="post-content">
-
-                            </div>
-
-                            <div class="clear"></div>
-
-                            <?php the_content(); ?>
-                        </div>
-
-                        <div class="location-info-block">
-
-                            <?php
-
-                            $location = get_field('location');
-                            if (!empty($location)):
+                            if (isset($venueInfo['lat'])):
                                 ?>
-                                <h4><?php echo get_location_address($location); ?></h4>
                                 <div class="acf-map">
-                                    <div class="marker" data-lat="<?php echo $location['lat']; ?>"
-                                         data-lng="<?php echo $location['lng']; ?>"><?php the_title(); ?>
+                                    <div class="marker" data-lat="<?php echo $venueInfo['lat']; ?>"
+                                         data-lng="<?php echo $venueInfo['lng']; ?>"><?php the_title(); ?>
                                     </div>
                                 </div>
                             <?php endif; ?>
