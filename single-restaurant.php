@@ -38,13 +38,9 @@ $format = get_post_format();
                             ?></span>
                                 <hr/>
 
-
                             </h3>
 
-
                             <!-- /post-header -->
-
-
 
                             <?php
                             if (has_post_thumbnail()) : ?>
@@ -72,10 +68,7 @@ $format = get_post_format();
                             display_restaurant_ratings_by_author('prs');
                             display_restaurant_ratings_by_author('allykc');
 
-
                             ?>
-
-
 
                             <div class="post-content">
 
@@ -100,7 +93,6 @@ $format = get_post_format();
                             }
 
                             $venueInfo = get_foursquare_data(get_the_title(), $location);
-
 
                             echo '<div class="clear"></div><div>';
 

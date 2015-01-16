@@ -123,7 +123,7 @@
 		<p class="credits-left fleft">
 		
 			&copy; <?php echo date("Y") ?> <a href="<?php echo home_url(); ?>" title="<?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a>
-		
+		<br/><br/>Restaurant data provided by <a href="https://developer.foursquare.com/" target="_blank">Foursquare</a>.
 		</p>
 		
 		<p class="credits-right fright">
