@@ -32,9 +32,9 @@ $format = get_post_format();
                                 <span style="display: none;" itemprop="bestRating">10</span>
                                 <span style="display: none;" itemprop="worstRating">0</span>
                             <?php
-
-                            echo "Overall Score: <span itemprop='ratingValue'>" . get_overall_restaurant_ratings(get_the_ID()) . "</span>";
-
+                            if(get_overall_restaurant_ratings(get_the_ID()) != false) {
+                                echo "Overall Score: <span itemprop='ratingValue'>" . get_overall_restaurant_ratings(get_the_ID()) . "</span>";
+                            }
                             ?></span>
                                 <hr/>
 
