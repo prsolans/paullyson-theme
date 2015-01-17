@@ -28,12 +28,13 @@ $format = get_post_format();
                             <h3>
 
                             <span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-                                <span style="display: none;" itemprop="reviewCount">2</span>
-                                <span style="display: none;" itemprop="bestRating">10</span>
+
                                 <span style="display: none;" itemprop="worstRating">0</span>
                             <?php
                             if(get_overall_restaurant_ratings(get_the_ID()) != false) {
-                                echo "Overall Score: <span itemprop='ratingValue'>" . get_overall_restaurant_ratings(get_the_ID()) . "</span>";
+                                $ratings = get_overall_restaurant_ratings(get_the_ID());
+                                echo "Overall Score: <span itemprop='ratingValue'>" . $ratings['overallScore'] . "</span>/<span itemprop='bestRating'>10</span>";
+                                echo "<br/>Ratings: <span itemprop='ratingCount'>".$ratings['count']."</span>";
                             }
                             ?></span>
                                 <hr/>
