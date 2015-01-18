@@ -17,127 +17,155 @@ $format = get_post_format();
 
                 <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
+                    <?php if ($format == 'quote' || $format == 'link' || $format == 'audio' || $format == 'status' || $format == 'chat') : ?>
+
+                        <?php if (has_post_thumbnail()) : ?>
+
+                            <div class="featured-media">
+
+                                <?php the_post_thumbnail('post-image'); ?>
+
+                                <?php if (!empty(get_post(get_post_thumbnail_id())->post_excerpt)) : ?>
+
+                                    <div class="media-caption-container">
+
+                                        <p class="media-caption"><?php echo get_post(get_post_thumbnail_id())->post_excerpt; ?></p>
+
+                                    </div>
+
+                                <?php endif; ?>
+
+                            </div> <!-- /featured-media -->
+
+                        <?php endif; ?>
+
+                    <?php endif; ?>
+
                     <div class="post-header">
 
-                        <div itemscope itemtype="http://schema.org/Restaurant">
+                        <h2 class="post-title"><a href="<?php the_permalink(); ?>" rel="bookmark"
+                                                  title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 
-                            <h2 class="post-title entry-title" itemprop="name"><a href="<?php the_permalink(); ?>"
-                                                                                  rel="bookmark"
-                                                                                  title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a>
-                            </h2>
+                    </div>
+                    <!-- /post-header -->
 
-                            <h3>
+                    <?php
 
-                            <span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+                    if ($format == 'video') : ?>
 
-                                <span style="display: none;" itemprop="worstRating">0</span>
+                        <?php $video_url = get_post_meta($post->ID, 'video_url', true); ?>
+
+                        <div class="featured-media">
+
+                            <?php if (strpos($video_url, '.mp4') !== false) : ?>
+
+                                <video controls>
+                                    <source src="<?php echo $video_url; ?>" type="video/mp4">
+                                </video>
+
+                            <?php else : ?>
+
                                 <?php
-                                if (get_overall_restaurant_ratings(get_the_ID()) != false) {
-                                    $ratings = get_overall_restaurant_ratings(get_the_ID());
-                                    echo "Overall Score: <span itemprop='ratingValue'>" . $ratings['overallScore'] . "</span>/<span itemprop='bestRating'>10</span>";
-                                    echo "<br/>Ratings: <span itemprop='ratingCount'>" . $ratings['count'] . "</span>";
-                                }
-                                ?></span>
-                                <hr/>
 
-                            </h3>
+                                $embed_code = wp_oembed_get($video_url);
 
-                            <!-- /post-header -->
+                                echo $embed_code;
 
-                            <?php
-                            if (has_post_thumbnail()) : ?>
-
-                                <div class="featured-media">
-
-                                    <?php the_post_thumbnail('post-image'); ?>
-
-                                    <?php if (!empty(get_post(get_post_thumbnail_id())->post_excerpt)) : ?>
-
-                                        <div class="media-caption-container">
-
-                                            <p class="media-caption"><?php echo get_post(get_post_thumbnail_id())->post_excerpt; ?></p>
-
-                                        </div>
-
-                                    <?php endif; ?>
-
-                                </div> <!-- /featured-media -->
-
-                            <?php endif; ?>
-
-                            <?php
-
-                            display_restaurant_ratings_by_author('prs');
-                            display_restaurant_ratings_by_author('allykc');
-
-                            ?>
-
-                            <div class="post-content">
-
-                            </div>
-
-                            <div class="clear"></div>
-
-                            <?php the_content(); ?>
-                        </div>
-
-                        <div class="location-info-block">
-
-                            <?php
-                            // START Restaurant Info
-
-                            $terms = get_the_terms($post->ID, 'location');
-
-                            if (!empty($terms)) {
-                                foreach ($terms AS $term) {
-                                    $location = $term->name;
-                                }
-                            }
-
-                            $venueInfo = get_foursquare_data(get_the_title(), $location);
-
-                            get_yelp_data(get_the_title(), $location);
-
-                            echo '<div class="clear"></div><div>';
-
-                            if (isset($venueInfo['streetAddress0'])) {
-                                echo "<span itemprop='address' itemscope itemtype='http://schema.org/PostalAddress'>";
-                                echo "<span itemprop='streetAddress'>";
-                                echo $venueInfo['streetAddress0'];
-                                echo "</span></span>";
-                            }
-                            if (isset($venueInfo['streetAddress1'])) {
-                                echo "<br/>" . $venueInfo['streetAddress1'];
-                            }
-                            if (isset($venueInfo['url'])) {
-                                echo "<br/><a href='" . $venueInfo['url'] . "' target='_blank' itemprop='url'>Website</a>";
-                            }
-                            if (isset($venueInfo['reservations'])) {
-                                echo "<br/><a href='" . $venueInfo['reservations'] . "' target='_blank' itemprop='acceptsReservations'>Reservations</a>";
-                            }
-
-                            echo "</div>";
-
-                            // END Restaurant Info
-
-                            if (isset($venueInfo['lat'])):
                                 ?>
-                                <div class="acf-map">
-                                    <div class="marker" data-lat="<?php echo $venueInfo['lat']; ?>"
-                                         data-lng="<?php echo $venueInfo['lng']; ?>"><?php the_title(); ?>
-                                    </div>
-                                </div>
+
                             <?php endif; ?>
 
-
-                            <?php
-                            if (isset($venueInfo['rating'])) {
-                                echo "<h4>Additional online ratings:</h4>";
-                                echo "<br/>Foursquare: " . $venueInfo['rating'] . " (" . $venueInfo['ratingSignals'] . " ratings)";
-                            }
-                            ?>
-
                         </div>
+
+                    <?php elseif ($format == 'audio') : ?>
+
+                        <?php $audio_url = get_post_meta($post->ID, 'audio_url', true); ?>
+
+                        <div class="post-audio">
+
+                            <audio controls="controls" id="audio-player">
+
+                                <source src="<?php echo $audio_url; ?>"/>
+
+                            </audio>
+
+                        </div> <!-- /post-audio -->
+
+                    <?php
+                    elseif ($format == 'quote') : ?>
+
+                        <?php $quote_content = get_post_meta($post->ID, 'quote_content', true); ?>
+                        <?php $quote_attribution = get_post_meta($post->ID, 'quote_attribution', true); ?>
+
+                        <div class="post-quote">
+
+                            <blockquote><?php echo $quote_content; ?></blockquote>
+
+                            <?php if ($quote_attribution != '') : ?>
+
+                                <cite><?php echo $quote_attribution; ?></cite>
+
+                            <?php endif; ?>
+
+                        </div> <!-- /post-quote -->
+
+                    <?php
+                    elseif ($format == 'link') : ?>
+
+                        <?php $link_url = get_post_meta($post->ID, 'link_url', true); ?>
+                        <?php $link_title = get_post_meta($post->ID, 'link_title', true); ?>
+
+                        <div class="post-link">
+
+                            <p><?php echo $link_title; ?></p>
+
+                            <a href="<?php echo $link_url; ?>"
+                               title="<?php echo $link_title; ?>"><?php echo url_to_domain($link_url); ?></a>
+
+                        </div> <!-- /post-link -->
+
+                    <?php
+                    elseif ($format == 'gallery') : ?>
+
+                        <div class="featured-media">
+
+                            <?php baskerville_flexslider('post-image'); ?>
+
+                        </div> <!-- /featured-media -->
+
+                    <?php
+                    elseif (has_post_thumbnail()) : ?>
+
+                        <div class="featured-media">
+
+                            <?php the_post_thumbnail('post-image'); ?>
+
+                            <?php if (!empty(get_post(get_post_thumbnail_id())->post_excerpt)) : ?>
+
+                                <div class="media-caption-container">
+
+                                    <p class="media-caption"><?php echo get_post(get_post_thumbnail_id())->post_excerpt; ?></p>
+
+                                </div>
+
+                            <?php endif; ?>
+
+                        </div> <!-- /featured-media -->
+
+                    <?php endif; ?>
+
+                    <div class="post-content">
+
+                        <?php the_content(); ?>
+
+                        <?php
+                        echo '<div class="rating-block"><h3>PRS says</h3>';
+                        echo '<label>Rating:</label> ' . get_field('prs_movie_rating');
+                        echo '</div>';
+                        echo '<div class="rating-block"><h3>Allykc says</h3>';
+                        echo '<label>Rating:</label> ' . get_field('allykc_movie_rating');
+                        echo '</div>';
+                        ?>
 
                         <?php wp_link_pages(); ?>
 
@@ -150,9 +178,9 @@ $format = get_post_format();
 
                         <div class="post-author">
 
-                            <div class="post-author-content vcard author">
+                            <div class="post-author-content">
 
-                                <h4 class="fn"><?php the_author_meta('display_name'); ?></h4>
+                                <h4><?php the_author_meta('display_name'); ?></h4>
 
                                 <p><?php the_author_meta('description'); ?></p>
 
@@ -213,7 +241,7 @@ $format = get_post_format();
 
                         <div class="post-meta">
 
-                            <p class="post-date date updated"><?php the_time(get_option('date_format')); ?></p>
+                            <p class="post-date"><?php the_time(get_option('date_format')); ?></p>
 
                             <?php if (function_exists('zilla_likes')) zilla_likes(); ?>
 
