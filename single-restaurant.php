@@ -87,10 +87,12 @@ $format = get_post_format();
                             // START Restaurant Info
 
                             $terms = get_the_terms($post->ID, 'location');
-
+                            debug_to_console($terms);
                             if (!empty($terms)) {
                                 foreach ($terms AS $term) {
-                                    $location = $term->name;
+                                    if ($term->parent == 0) {
+                                        $location = $term->name;
+                                    }
                                 }
                             }
 
