@@ -87,7 +87,7 @@ $format = get_post_format();
                             // START Restaurant Info
 
                             $terms = get_the_terms($post->ID, 'location');
-                            debug_to_console($terms);
+
                             if (!empty($terms)) {
                                 foreach ($terms AS $term) {
                                     if ($term->parent == 0) {
@@ -96,47 +96,52 @@ $format = get_post_format();
                                 }
                             }
 
-                            $venueInfo = get_foursquare_data(get_the_title(), $location);
-
-                            get_yelp_data(get_the_title(), $location);
+                            $foursquareInfo = get_foursquare_data(get_the_title(), $location);
+                            $yelpInfo = get_yelp_data(get_the_title(), $location);
 
                             echo '<div class="clear"></div><div>';
 
-                            if (isset($venueInfo['streetAddress0'])) {
+                            if (isset($foursquareInfo['streetAddress0'])) {
                                 echo "<span itemprop='address' itemscope itemtype='http://schema.org/PostalAddress'>";
                                 echo "<span itemprop='streetAddress'>";
-                                echo $venueInfo['streetAddress0'];
+                                echo $foursquareInfo['streetAddress0'];
                                 echo "</span></span>";
                             }
-                            if (isset($venueInfo['streetAddress1'])) {
-                                echo "<br/>" . $venueInfo['streetAddress1'];
+                            if (isset($foursquareInfo['streetAddress1'])) {
+                                echo "<br/>" . $foursquareInfo['streetAddress1'];
                             }
-                            if (isset($venueInfo['url'])) {
-                                echo "<br/><a href='" . $venueInfo['url'] . "' target='_blank' itemprop='url'>Website</a>";
+                            if (isset($foursquareInfo['url'])) {
+                                echo "<br/><a href='" . $foursquareInfo['url'] . "' target='_blank' itemprop='url'>Website</a>";
                             }
-                            if (isset($venueInfo['reservations'])) {
-                                echo "<br/><a href='" . $venueInfo['reservations'] . "' target='_blank' itemprop='acceptsReservations'>Reservations</a>";
+                            if (isset($foursquareInfo['reservations'])) {
+                                echo "<br/><a href='" . $foursquareInfo['reservations'] . "' target='_blank' itemprop='acceptsReservations'>Reservations</a>";
                             }
 
                             echo "</div>";
 
                             // END Restaurant Info
 
-                            if (isset($venueInfo['lat'])):
+                            if (isset($foursquareInfo['lat'])):
                                 ?>
                                 <div class="acf-map">
-                                    <div class="marker" data-lat="<?php echo $venueInfo['lat']; ?>"
-                                         data-lng="<?php echo $venueInfo['lng']; ?>"><?php the_title(); ?>
+                                    <div class="marker" data-lat="<?php echo $foursquareInfo['lat']; ?>"
+                                         data-lng="<?php echo $foursquareInfo['lng']; ?>"><?php the_title(); ?>
                                     </div>
                                 </div>
                             <?php endif; ?>
 
 
                             <?php
-                            if (isset($venueInfo['rating'])) {
+                            if (isset($foursquareInfo['rating'])) {
                                 echo "<h4>Additional online ratings:</h4>";
-                                echo "<br/>Foursquare: " . $venueInfo['rating'] . " (" . $venueInfo['ratingSignals'] . " ratings)";
+                                echo "<br/>Foursquare: " . $foursquareInfo['rating'] . " (" . $foursquareInfo['ratingSignals'] . " ratings)";
                             }
+                            if (isset($yelpInfo['rating'])) {
+                                echo "<br/>Yelp: ". $yelpInfo['rating']*2 . " (" . $yelpInfo['review_count'] . " ratings)";
+                            }
+                            echo "<br/>Our Score:" . $ratings['overallScore'];
+                            $weightedScore = ($ratings['overallScore']*.8) + ($foursquareInfo['rating']*.1) + ($yelpInfo['rating']*2*.1);
+                            echo "<br/>Weighted Score:" . $weightedScore;
                             ?>
 
                         </div>
