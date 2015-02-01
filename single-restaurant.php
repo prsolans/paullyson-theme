@@ -133,14 +133,30 @@ $format = get_post_format();
 
                             <?php
                             if (isset($foursquareInfo['rating'])) {
+                                $fsRating = $foursquareInfo['rating'];
+                                $fsCount = $foursquareInfo['ratingSignals'];
                                 echo "<h4>Additional online ratings:</h4>";
-                                echo "<br/>Foursquare: " . $foursquareInfo['rating'] . " (" . $foursquareInfo['ratingSignals'] . " ratings)";
+                                echo "<br/>Foursquare: " . $fsRating . " (" . $fsCount . " ratings)";
+                            } else {
+                                $fsRating = 0;
+                                $fsCount = 0;
                             }
                             if (isset($yelpInfo['rating'])) {
-                                echo "<br/>Yelp: ". $yelpInfo['rating']*2 . " (" . $yelpInfo['review_count'] . " ratings)";
+                                $yelpRating = $yelpInfo['rating'];
+                                $yelpCount = $yelpInfo['review_count'];
+                                echo "<br/>Yelp: " . $yelpRating * 2 . " (" . $yelpCount . " ratings)";
+                            } else {
+                                $yelpRating = 0;
+                                $yelpCount = 0;
                             }
-                            echo "<br/>Our Score:" . $ratings['overallScore'];
-                            $weightedScore = ($ratings['overallScore']*.8) + ($foursquareInfo['rating']*.1) + ($yelpInfo['rating']*2*.1);
+                            if (isset($ratings['overallScore'])) {
+                                $ourRating = $ratings['overallScore'];
+                                echo "<br/>Our Score:" . $ratings['overallScore'];
+                            } else {
+                                $ourRating = 0;
+                            }
+
+                            $weightedScore = get_weighted_score($ourRating, $fsRating, $fsCount, $yelpRating, $yelpCount);
                             echo "<br/>Weighted Score:" . $weightedScore;
                             ?>
 
