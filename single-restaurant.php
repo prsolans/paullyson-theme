@@ -4,6 +4,25 @@ get_header();
 
 $format = get_post_format();
 
+$terms = get_the_terms($post->ID, 'location');
+
+if (!empty($terms)) {
+    foreach ($terms AS $term) {
+        if ($term->parent == 0) {
+            $location = $term->name;
+        }
+    }
+}
+
+$foursquareInfo = get_foursquare_data(get_the_title(), $location);
+$yelpInfo = get_yelp_data(get_the_title(), $location);
+
+$fsRating = 0;
+$fsCount = 0;
+$yelpRating = 0;
+$yelpCount = 0;
+$ourRating = 0;
+
 ?>
 
     <div class="wrapper section medium-padding">
@@ -19,28 +38,41 @@ $format = get_post_format();
 
                     <div class="post-header">
 
-                        <div itemscope itemtype="http://schema.org/Restaurant">
+                        <div itemscope itemtype="http://schema.org/Restaurant" style="margin-bottom: 5px;">
 
                             <h2 class="post-title entry-title" itemprop="name"><a href="<?php the_permalink(); ?>"
                                                                                   rel="bookmark"
                                                                                   title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a>
                             </h2>
 
-                            <h3>
-
                             <span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
 
                                 <span style="display: none;" itemprop="worstRating">0</span>
+                                <span style="display: none;" itemprop='bestRating'>10</span>
                                 <?php
+
                                 if (get_overall_restaurant_ratings(get_the_ID()) != false) {
+
+                                    echo "<div class='one-half''>";
                                     $ratings = get_overall_restaurant_ratings(get_the_ID());
-                                    echo "Overall Score: <span itemprop='ratingValue'>" . $ratings['overallScore'] . "</span>/<span itemprop='bestRating'>10</span>";
-                                    echo "<br/>Ratings: <span itemprop='ratingCount'>" . $ratings['count'] . "</span>";
+                                    echo "<div class='paullyson-score " . $ratings['class'] . " fl' itemprop='ratingValue'>" . $ratings['overallScore'] . "</div><div class='fl'><b>Paullyson Score</b><br/>based on " . $ratings['count'] . " ratings.</div>";
+                                    echo "</div>";
+
+                                    $ourRating = $ratings['overallScore'];
                                 }
+
+                                ?>
+                                <div class="one-half">
+                                <?php
+                                $weightedScore = get_restaurant_metascore($ourRating, $foursquareInfo['rating'], $foursquareInfo['ratingSignals'], $yelpInfo['rating'], $yelpInfo['review_count']);
+                                echo "<div class='metascore-button " . $weightedScore['class'] . " fl'>" . $weightedScore['score'] . "</div><div class='fl'><b>Meta Score</b><br/>based on " . $weightedScore['externalReviews'] . " reviews.</div>";
+
                                 ?></span>
+
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
                                 <hr/>
 
-                            </h3>
 
                             <!-- /post-header -->
 
@@ -85,19 +117,9 @@ $format = get_post_format();
 
                             <?php
                             // START Restaurant Info
-
-                            $terms = get_the_terms($post->ID, 'location');
-
-                            if (!empty($terms)) {
-                                foreach ($terms AS $term) {
-                                    if ($term->parent == 0) {
-                                        $location = $term->name;
-                                    }
-                                }
-                            }
-
-                            $foursquareInfo = get_foursquare_data(get_the_title(), $location);
-                            $yelpInfo = get_yelp_data(get_the_title(), $location);
+                            echo "<img class='fs-image' src='" . $foursquareInfo['image0'] . "'/>";
+                            echo "<img class='fs-image' src='" . $foursquareInfo['image1'] . "'/>";
+                            echo "<img class='fs-image' src='" . $foursquareInfo['image2'] . "'/>";
 
                             echo '<div class="clear"></div><div>';
 
@@ -130,35 +152,26 @@ $format = get_post_format();
                                 </div>
                             <?php endif; ?>
 
-
                             <?php
+
                             if (isset($foursquareInfo['rating'])) {
                                 $fsRating = $foursquareInfo['rating'];
                                 $fsCount = $foursquareInfo['ratingSignals'];
                                 echo "<h4>Additional online ratings:</h4>";
                                 echo "<br/>Foursquare: " . $fsRating . " (" . $fsCount . " ratings)";
-                            } else {
-                                $fsRating = 0;
-                                $fsCount = 0;
                             }
                             if (isset($yelpInfo['rating'])) {
                                 $yelpRating = $yelpInfo['rating'];
                                 $yelpCount = $yelpInfo['review_count'];
                                 echo "<br/>Yelp: " . $yelpRating * 2 . " (" . $yelpCount . " ratings)";
-                            } else {
-                                $yelpRating = 0;
-                                $yelpCount = 0;
                             }
                             if (isset($ratings['overallScore'])) {
                                 $ourRating = $ratings['overallScore'];
                                 echo "<br/>Our Score:" . $ratings['overallScore'];
-                            } else {
-                                $ourRating = 0;
                             }
 
-                            $weightedScore = get_weighted_score($ourRating, $fsRating, $fsCount, $yelpRating, $yelpCount);
-                            echo "<br/>Weighted Score:" . $weightedScore;
                             ?>
+
 
                         </div>
 

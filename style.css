@@ -27,6 +27,42 @@ h4 {
 
 .blog-title, .post-header .post-title {font-family: 'Fira Sans', sans-serif; font-weight: 700;}
 
+.metascore-button, .paullyson-score {
+    height: 42px;
+    width: 42px;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    line-height: 24px;
+    text-align: center;
+    padding: 10px;
+    display: inline-block;
+    margin-bottom: 15px;
+    margin-right: 9px;
+    border-radius: 9px;
+}
+
+.paullyson-score {
+    width: 60px;
+    height: 60px;
+    font-size: 1.4rem;
+    line-height: 30px;
+    padding-top: 15px;
+    margin-right: 9px;
+}
+
+.positive {
+    background: green;
+}
+
+.mixed {
+    background: #fc3;
+}
+
+.negative {
+    background: red;
+}
+
 .nocomments {display: none;}
 
 .single .post-content {
@@ -145,6 +181,14 @@ h4 {
 /* =Theme utility classes
 -------------------------------------------------------------- */
 .cleardiv {clear: both; height: 20px}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
 
 .one-half {
     width: 48%;
