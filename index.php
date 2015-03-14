@@ -27,7 +27,8 @@
                 display_recent_ratings('true'); ?>
             </div>
             <div class="one-half shadow-box-border">
-                <?php display_upcoming_events(); ?>
+                <?php display_upcoming_events();
+                display_restaurants_radar(); ?>
             </div>
 
         </div>
